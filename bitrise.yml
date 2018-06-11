@@ -41,6 +41,7 @@ workflows:
         run_if: true
         inputs:
         - BITRISE_TAG_INFO_PLIST_NAME: "Info.plist"
+        - BITRISE_TAG_FORMAT: "%s#%s"
     - script:
         inputs:
         - content: |

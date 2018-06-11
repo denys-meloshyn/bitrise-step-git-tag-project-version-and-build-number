@@ -74,6 +74,15 @@ inputs:
       is_expand: true
       is_required: true
       value_options: []
+  - BITRISE_TAG_FORMAT: "%s(%s)"
+    opts:
+      title: "Result format"
+      summary: Provide format of generated tag & build number
+      description: |
+        Provide format of generated tag & build number
+      is_expand: true
+      is_required: false
+      value_options: []
 
 outputs:
   - EXAMPLE_STEP_OUTPUT:
