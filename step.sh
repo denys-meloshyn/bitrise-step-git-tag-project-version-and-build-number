@@ -1,6 +1,53 @@
 #!/bin/bash
 set -ex
 
+read_dom () {
+    local IFS=\>
+    read -d \< ENTITY CONTENT
+}
+
+CFBundleVersion=""
+CFBundleVersionKey=false
+
+CFBundleShortVersionString=""
+CFBundleShortVersionStringKey=false   
+
+while read_dom; do
+	if [[ $CFBundleShortVersionStringKey = true ]]; then 
+		if [ $ENTITY = "string" ] ; then
+		    CFBundleShortVersionString=$CONTENT
+	    	CFBundleShortVersionStringKey=false
+		fi
+    fi
+    
+    if [[ $CFBundleVersionKey = true ]]; then 
+		if [ $ENTITY = "string" ] ; then
+		    CFBundleVersion=$CONTENT
+	    	CFBundleVersionKey=false
+		fi
+    fi
+
+    if [[ $CONTENT = "CFBundleShortVersionString" ]] ; then
+    	CFBundleShortVersionStringKey=true
+    fi
+    
+    if [[ $CONTENT = "CFBundleVersion" ]] ; then
+    	CFBundleVersionKey=true
+    fi
+done < BITRISE_TAG_INFO_PLIST_NAME
+
+if [ -z "$CFBundleShortVersionString" ]; then
+    echo "CFBundleShortVersionString is empty"
+    return 1
+fi
+
+if [ -z "$CFBundleVersion" ]; then
+    echo "CFBundleVersion is empty"
+    return 1
+fi
+
+echo "$CFBundleShortVersionString"
+echo "$CFBundleVersion"
 echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
 
 #
