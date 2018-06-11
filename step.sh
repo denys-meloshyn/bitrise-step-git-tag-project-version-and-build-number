@@ -39,7 +39,7 @@ while read_dom; do
     if [[ $CONTENT = "CFBundleVersion" ]] ; then
     	CFBundleVersionKey=true
     fi
-done < $BITRISE_SOURCE_DIR/$BITRISE_TAG_INFO_PLIST_NAME
+done < $BITRISE_TAG_INFO_PLIST_NAME
 
 if [ -z "$CFBundleShortVersionString" ]; then
     echo "CFBundleShortVersionString is empty"
@@ -51,7 +51,10 @@ if [ -z "$CFBundleVersion" ]; then
     exit 1
 fi
 
-echo "$CFBundleShortVersionString ($CFBundleVersion)"
+TAG_NAME="$CFBundleShortVersionString($CFBundleVersion)"
+echo $TAG_NAME
+git tag "$TAG_NAME"
+# git push --tags 
 
 exit 0
 
