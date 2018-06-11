@@ -65,7 +65,7 @@ toolkit:
 
 
 inputs:
-  - BITRISE_TAG_INFO_PLIST_NAME: File name of 'Info.plist'
+  - BITRISE_TAG_INFO_PLIST_NAME:
     opts:
       title: "File name of 'Info.plist'"
       summary: File of your release 'Info.plist' file

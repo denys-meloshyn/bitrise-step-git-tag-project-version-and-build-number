@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+# set -ex
 
 read_dom () {
     local IFS=\>
@@ -11,6 +11,11 @@ CFBundleVersionKey=false
 
 CFBundleShortVersionString=""
 CFBundleShortVersionStringKey=false   
+
+if [ -z "$BITRISE_TAG_INFO_PLIST_NAME" ]; then
+    echo "BITRISE_TAG_INFO_PLIST_NAME is empty"
+    exit 1
+fi
 
 while read_dom; do
 	if [[ $CFBundleShortVersionStringKey = true ]]; then 
@@ -34,21 +39,21 @@ while read_dom; do
     if [[ $CONTENT = "CFBundleVersion" ]] ; then
     	CFBundleVersionKey=true
     fi
-done < BITRISE_TAG_INFO_PLIST_NAME
+done < $BITRISE_SOURCE_DIR/$BITRISE_TAG_INFO_PLIST_NAME
 
 if [ -z "$CFBundleShortVersionString" ]; then
     echo "CFBundleShortVersionString is empty"
-    return 1
+    exit 1
 fi
 
 if [ -z "$CFBundleVersion" ]; then
     echo "CFBundleVersion is empty"
-    return 1
+    exit 1
 fi
 
-echo "$CFBundleShortVersionString"
-echo "$CFBundleVersion"
-echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
+echo "$CFBundleShortVersionString ($CFBundleVersion)"
+
+exit 0
 
 #
 # --- Export Environment Variables for other Steps:
