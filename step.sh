@@ -60,7 +60,7 @@ else
 fi
 echo $TAG_NAME
 git tag "$TAG_NAME"
-# git push --tags 
+git push --tags 
 
 exit 0
 
