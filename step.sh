@@ -54,13 +54,13 @@ fi
 TAG_NAME=""
 
 if [ -z "$BITRISE_TAG_FORMAT" ]; then
-	printf -v TAG_NAME "%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
+	printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
 else
 	printf -v TAG_NAME "$BITRISE_TAG_FORMAT" "$CFBundleShortVersionString" "$CFBundleVersion"
 fi
 echo $TAG_NAME
-git tag "$TAG_NAME"
-git push --tags 
+git tag -a "$TAG_NAME" "$BITRISE_GIT_COMMIT"
+git push --tags origin master
 
 exit 0
 
