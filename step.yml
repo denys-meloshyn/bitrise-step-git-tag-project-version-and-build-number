@@ -74,7 +74,7 @@ inputs:
       is_expand: true
       is_required: true
       value_options: []
-  - BITRISE_TAG_FORMAT: "%s(%s)"
+  - BITRISE_TAG_FORMAT: "v%s(%s)"
     opts:
       title: "Result format"
       summary: Provide format of generated tag & build number
