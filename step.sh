@@ -59,7 +59,7 @@ else
 	printf -v TAG_NAME "$BITRISE_TAG_FORMAT" "$CFBundleShortVersionString" "$CFBundleVersion"
 fi
 echo $TAG_NAME
-git tag -a "$TAG_NAME" "$BITRISE_GIT_COMMIT"
+git tag -a "$TAG_NAME" "$BITRISE_GIT_COMMIT" -m ""
 git push --tags origin master
 
 exit 0
