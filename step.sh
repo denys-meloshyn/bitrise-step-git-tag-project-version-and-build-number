@@ -12,8 +12,8 @@ CFBundleVersionKey=false
 CFBundleShortVersionString=""
 CFBundleShortVersionStringKey=false   
 
-if [ -z "$BITRISE_TAG_INFO_PLIST_NAME" ]; then
-    echo "BITRISE_TAG_INFO_PLIST_NAME is empty"
+if [ -z "$bitrise_tag_info_plist_path" ]; then
+    echo "bitrise_tag_info_plist_path is empty"
     exit 1
 fi
 
@@ -39,7 +39,7 @@ while read_dom; do
     if [[ $CONTENT = "CFBundleVersion" ]] ; then
     	CFBundleVersionKey=true
     fi
-done < $BITRISE_TAG_INFO_PLIST_NAME
+done < $bitrise_tag_info_plist_path
 
 if [ -z "$CFBundleShortVersionString" ]; then
     echo "CFBundleShortVersionString is empty"
@@ -53,10 +53,10 @@ fi
 
 TAG_NAME=""
 
-if [ -z "$BITRISE_TAG_FORMAT" ]; then
+if [ -z "$bitrise_tag_format" ]; then
 	printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
 else
-	printf -v TAG_NAME "$BITRISE_TAG_FORMAT" "$CFBundleShortVersionString" "$CFBundleVersion"
+	printf -v TAG_NAME "$bitrise_tag_format" "$CFBundleShortVersionString" "$CFBundleVersion"
 fi
 echo $TAG_NAME
 git checkout "$BITRISE_GIT_BRANCH"
