@@ -60,7 +60,7 @@ else
 fi
 echo $TAG_NAME
 git checkout "$BITRISE_GIT_BRANCH"
-git tag -a "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH" -m ""
+git tag "$TAG_NAME"
 git push --tags
 
 exit 0
