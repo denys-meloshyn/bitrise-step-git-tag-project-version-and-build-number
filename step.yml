@@ -73,7 +73,6 @@ inputs:
         File of your release 'Info.plist' file
       is_expand: true
       is_required: true
-      value_options: []
   - bitrise_tag_format: "v%s(%s)"
     opts:
       title: "Result format"
@@ -82,7 +81,6 @@ inputs:
         Provide format of generated tag & build number
       is_expand: true
       is_required: false
-      value_options: []
 
 outputs:
   - EXAMPLE_STEP_OUTPUT:
