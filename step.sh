@@ -57,7 +57,7 @@ if [ -z "$bitrise_tag_format" ]; then
     printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
 else
     name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
-    name="${name//_BUILD_/$CFBundleShortVersionString}"
+    name="${name//_BUILD_/$CFBundleVersion}"
     printf -v TAG_NAME "$name"
 fi
 echo $TAG_NAME
