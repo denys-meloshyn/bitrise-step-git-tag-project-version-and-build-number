@@ -65,15 +65,20 @@ toolkit:
 
 
 inputs:
-  - BITRISE_TAG_INFO_PLIST_NAME: File name of 'Info.plist'
+  - bitrise_tag_info_plist_path: ""
     opts:
-      title: "File name of 'Info.plist'"
-      summary: File of your release 'Info.plist' file
+      title: "Path to the 'Info.plist'"
+      summary: Path to the 'Info.plist' file
       description: |
         File of your release 'Info.plist' file
-      is_expand: true
       is_required: true
-      value_options: []
+  - bitrise_tag_format: "v%s(%s)"
+    opts:
+      title: "Result format"
+      summary: Provide format of generated tag & build number
+      description: |
+        Provide format of generated tag & build number
+      is_required: false
 
 outputs:
   - EXAMPLE_STEP_OUTPUT:

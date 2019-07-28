@@ -40,7 +40,8 @@ workflows:
           file if you would not specify another value.
         run_if: true
         inputs:
-        - example_step_input: Example Step Input's value
+        - BITRISE_TAG_INFO_PLIST_NAME: "Info.plist"
+        - BITRISE_TAG_FORMAT: "%s#%s"
     - script:
         inputs:
         - content: |
