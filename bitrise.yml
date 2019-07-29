@@ -40,8 +40,9 @@ workflows:
           file if you would not specify another value.
         run_if: true
         inputs:
-        - BITRISE_TAG_INFO_PLIST_NAME: "Info.plist"
-        - BITRISE_TAG_FORMAT: "%s#%s"
+        - bitrise_tag_info_plist_path: "Info.plist"
+        - bitrise_tag_format: "v_VERSION_(_BUILD_)"
+        - use_lightweight_tag: "no"
     - script:
         inputs:
         - content: |

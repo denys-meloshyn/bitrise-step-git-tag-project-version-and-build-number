@@ -10,7 +10,7 @@ CFBundleVersion=""
 CFBundleVersionKey=false
 
 CFBundleShortVersionString=""
-CFBundleShortVersionStringKey=false   
+CFBundleShortVersionStringKey=false
 
 if [ -z "$bitrise_tag_info_plist_path" ]; then
     echo "bitrise_tag_info_plist_path is empty"
@@ -18,27 +18,27 @@ if [ -z "$bitrise_tag_info_plist_path" ]; then
 fi
 
 while read_dom; do
-	if [[ $CFBundleShortVersionStringKey = true ]]; then 
-		if [ $ENTITY = "string" ] ; then
-		    CFBundleShortVersionString=$CONTENT
-	    	CFBundleShortVersionStringKey=false
-		fi
+  if [[ $CFBundleShortVersionStringKey = true ]]; then
+    if [ $ENTITY = "string" ] ; then
+      CFBundleShortVersionString=$CONTENT
+      CFBundleShortVersionStringKey=false
     fi
-    
-    if [[ $CFBundleVersionKey = true ]]; then 
-		if [ $ENTITY = "string" ] ; then
-		    CFBundleVersion=$CONTENT
-	    	CFBundleVersionKey=false
-		fi
-    fi
+  fi
 
-    if [[ $CONTENT = "CFBundleShortVersionString" ]] ; then
-    	CFBundleShortVersionStringKey=true
+  if [[ $CFBundleVersionKey = true ]]; then
+    if [ $ENTITY = "string" ] ; then
+      CFBundleVersion=$CONTENT
+      CFBundleVersionKey=false
     fi
-    
-    if [[ $CONTENT = "CFBundleVersion" ]] ; then
-    	CFBundleVersionKey=true
-    fi
+  fi
+
+  if [[ $CONTENT = "CFBundleShortVersionString" ]] ; then
+    CFBundleShortVersionStringKey=true
+  fi
+
+  if [[ $CONTENT = "CFBundleVersion" ]] ; then
+    CFBundleVersionKey=true
+  fi
 done < $bitrise_tag_info_plist_path
 
 if [ -z "$CFBundleShortVersionString" ]; then
@@ -54,14 +54,28 @@ fi
 TAG_NAME=""
 
 if [ -z "$bitrise_tag_format" ]; then
-	printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
+    printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
 else
-	printf -v TAG_NAME "$bitrise_tag_format" "$CFBundleShortVersionString" "$CFBundleVersion"
+  if [[ $bitrise_tag_format == *"_VERSION_"* ]]; then
+    name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
+    name="${name//_BUILD_/$CFBundleVersion}"
+    printf -v TAG_NAME "$name"
+  else
+    # Support previous integration
+    printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
+  fi
+
 fi
 echo $TAG_NAME
+
 git checkout "$BITRISE_GIT_BRANCH"
-git tag "$TAG_NAME"
-git push --tags
+git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"
+
+if [[ $use_lightweight_tag = "yes" ]]; then
+    git push origin "$TAG_NAME"
+else
+    git push --tags
+fi
 
 exit 0
 
