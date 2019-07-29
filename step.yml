@@ -72,13 +72,22 @@ inputs:
       description: |
         File of your release 'Info.plist' file
       is_required: true
-  - bitrise_tag_format: "v%s(%s)"
+  - bitrise_tag_format: "v_VERSION_(_BUILD_)"
     opts:
       title: "Result format"
       summary: Provide format of generated tag & build number
       description: |
-        Provide format of generated tag & build number
+        Provide format of generated tag & build number. You can use the following placeholders: ``_VERSION_``, ``_BUILD_``
       is_required: false
+  - use_lightweight_tag: "no"
+    opts:
+      category: Config
+      title: "Use lightweight tag?"
+      description: |
+        If yes, the tag will be lightweight, i.e. not trigger a commit/push
+      value_options:
+        - "no"
+        - "yes"
 
 outputs:
   - EXAMPLE_STEP_OUTPUT:
