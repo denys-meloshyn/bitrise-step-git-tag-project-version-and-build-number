@@ -67,6 +67,11 @@ if [[ $CFBundleShortVersionString == *MARKETING_VERSION* ]]; then
     MARKETING_VERSION="${MARKETING_VERSION%;}"
   done
 
+  if [ -z "$MARKETING_VERSION" ]; then
+    echo "MARKETING_VERSION is empty"
+    exit 1
+  fi
+
   CFBundleShortVersionString=$MARKETING_VERSION
 fi
 
