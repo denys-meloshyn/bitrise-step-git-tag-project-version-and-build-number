@@ -51,6 +51,25 @@ if [ -z "$CFBundleVersion" ]; then
   exit 1
 fi
 
+if [[ $CFBundleShortVersionString == *MARKETING_VERSION* ]]; then
+  echo "Exctract version number from xcodeproj"
+
+  if [ -z "$bitrise_tag_xcodeproj_path" ]; then
+    echo "bitrise_tag_xcodeproj_path is empty"
+    exit 1
+  fi
+
+  MARKETING_VERSION=""
+  LINES=$(sed -n '/MARKETING_VERSION/=' "$bitrise_tag_xcodeproj_path/project.pbxproj")
+  for LINE in $LINES; do
+    MARKETING_VERSION=$(sed -n "$LINE"p "$bitrise_tag_xcodeproj_path"/project.pbxproj)
+    MARKETING_VERSION="${MARKETING_VERSION#*= }"
+    MARKETING_VERSION="${MARKETING_VERSION%;}"
+  done
+
+  CFBundleShortVersionString=$MARKETING_VERSION
+fi
+
 TAG_NAME=""
 
 if [ -z "$bitrise_tag_format" ]; then
@@ -64,9 +83,8 @@ else
     # Support previous integration
     printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
   fi
-
 fi
-echo $TAG_NAME
+echo "New tag: $TAG_NAME"
 
 git checkout "$BITRISE_GIT_BRANCH"
 git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"
