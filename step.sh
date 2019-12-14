@@ -51,6 +51,30 @@ if [ -z "$CFBundleVersion" ]; then
   exit 1
 fi
 
+if [[ $CFBundleVersion == *CURRENT_PROJECT_VERSION* ]]; then
+  echo "Exctract build number from xcodeproj"
+
+  if [ -z "$bitrise_tag_xcodeproj_path" ]; then
+    echo "bitrise_tag_xcodeproj_path is empty"
+    exit 1
+  fi
+
+  CURRENT_PROJECT_VERSION=""
+  LINES=$(sed -n '/CURRENT_PROJECT_VERSION/=' "$bitrise_tag_xcodeproj_path/project.pbxproj")
+  for LINE in $LINES; do
+    CURRENT_PROJECT_VERSION=$(sed -n "$LINE"p "$bitrise_tag_xcodeproj_path"/project.pbxproj)
+    CURRENT_PROJECT_VERSION="${CURRENT_PROJECT_VERSION#*= }"
+    CURRENT_PROJECT_VERSION="${CURRENT_PROJECT_VERSION%;}"
+  done
+
+  if [ -z "$CURRENT_PROJECT_VERSION" ]; then
+    echo "CURRENT_PROJECT_VERSION is empty"
+    exit 1
+  fi
+
+  CFBundleVersion=$CURRENT_PROJECT_VERSION
+fi
+
 if [[ $CFBundleShortVersionString == *MARKETING_VERSION* ]]; then
   echo "Exctract version number from xcodeproj"
 
