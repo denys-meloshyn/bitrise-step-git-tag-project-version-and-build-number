@@ -39,7 +39,7 @@ while read_dom; do
   if [[ $CONTENT == "CFBundleVersion" ]]; then
     CFBundleVersionKey=true
   fi
-done <$bitrise_tag_info_plist_path
+done <"$bitrise_tag_info_plist_path"
 
 if [ -z "$CFBundleShortVersionString" ]; then
   echo "CFBundleShortVersionString is empty"
