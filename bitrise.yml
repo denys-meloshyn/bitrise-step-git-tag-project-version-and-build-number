@@ -42,7 +42,8 @@ workflows:
           inputs:
             - bitrise_tag_xcodeproj_path: "Test.xcodeproj"
             #- bitrise_tag_info_plist_path: "Info.plist"
-            - bitrise_tag_info_plist_path: "Info_xcode_11.plist"
+            - bitrise_tag_info_plist_path: "Info space name.plist"
+            #- bitrise_tag_info_plist_path: "Info_xcode_11.plist"
             - bitrise_tag_format: "v_VERSION_(_BUILD_)"
             - use_lightweight_tag: "no"
       - script:
