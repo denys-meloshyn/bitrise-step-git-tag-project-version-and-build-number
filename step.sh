@@ -114,8 +114,6 @@ else
   fi
 fi
 echo "New tag: $TAG_NAME"
-
-git checkout "$BITRISE_GIT_BRANCH"
 git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"
 
 if [[ $use_lightweight_tag == "yes" ]]; then
