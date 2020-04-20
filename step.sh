@@ -114,7 +114,6 @@ else
   fi
 fi
 echo "New tag: $TAG_NAME"
-echo "$GIT_CLONE_COMMIT_HASH"
 git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"
 
 if [[ $use_lightweight_tag == "yes" ]]; then
