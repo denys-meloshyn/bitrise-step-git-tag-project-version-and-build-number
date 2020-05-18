@@ -10,7 +10,7 @@ fatal: Could not read from remote repository.
 
 Follow the instruction:
 * Generate new key pair: `ssh-keygen -f deploy_rw -N ''`
-* You wll have two files: `deploy_rw.pub` and `deploy_rw`
+* You will have two files: `deploy_rw.pub` and `deploy_rw`
 * Add to `GitHub` a `deploy_rw.pub key`
 * Go to project settings in `Bitrise` and add the private key `deploy_rw`
 
