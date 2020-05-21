@@ -29,7 +29,7 @@ workflows:
             but would break if the step is included in another `bitrise.yml`.
           run_if: true
           inputs:
-            - path: ./_tmp
+            - path: ./
             - is_create_path: true
       - path::./:
           title: Step Test
@@ -40,9 +40,9 @@ workflows:
             file if you would not specify another value.
           run_if: true
           inputs:
-            - bitrise_tag_xcodeproj_path: "Test.xcodeproj"
+            - bitrise_tag_xcodeproj_path: "./_tmp/Test.xcodeproj"
             #- bitrise_tag_info_plist_path: "Info.plist"
-            - bitrise_tag_info_plist_path: "Info space name.plist"
+            - bitrise_tag_info_plist_path: "./_tmp/Info space name.plist"
             #- bitrise_tag_info_plist_path: "Info_xcode_11.plist"
             - bitrise_tag_format: "v_VERSION_(_BUILD_)"
             #- bitrise_tag_format: "build__BUILD_"

@@ -1,130 +1,26 @@
 #!/bin/bash
 # set -ex
 
-read_dom() {
-  local IFS=\>
-  read -d \< ENTITY CONTENT
-}
-
-CFBundleVersion=""
-CFBundleVersionKey=false
-
-CFBundleShortVersionString=""
-CFBundleShortVersionStringKey=false
-
 if [ -z "$bitrise_tag_info_plist_path" ]; then
   echo "bitrise_tag_info_plist_path is empty"
   exit 1
 fi
 
-while read_dom; do
-  if [[ $CFBundleShortVersionStringKey == true ]]; then
-    if [ $ENTITY = "string" ]; then
-      CFBundleShortVersionString=$CONTENT
-      CFBundleShortVersionStringKey=false
-    fi
-  fi
-
-  if [[ $CFBundleVersionKey == true ]]; then
-    if [ $ENTITY = "string" ]; then
-      CFBundleVersion=$CONTENT
-      CFBundleVersionKey=false
-    fi
-  fi
-
-  if [[ $CONTENT == "CFBundleShortVersionString" ]]; then
-    CFBundleShortVersionStringKey=true
-  fi
-
-  if [[ $CONTENT == "CFBundleVersion" ]]; then
-    CFBundleVersionKey=true
-  fi
-done <"$bitrise_tag_info_plist_path"
-
-if [ -z "$CFBundleShortVersionString" ]; then
-  echo "CFBundleShortVersionString is empty"
-  exit 1
-fi
-
+source ./read_bundle_version.sh readBundleVersion "$bitrise_tag_info_plist_path" "$bitrise_tag_xcodeproj_path" CFBundleVersion
 if [ -z "$CFBundleVersion" ]; then
   echo "CFBundleVersion is empty"
   exit 1
 fi
 
-if [[ $CFBundleVersion == *CURRENT_PROJECT_VERSION* ]]; then
-  echo "Exctract build number from xcodeproj"
-
-  if [ -z "$bitrise_tag_xcodeproj_path" ]; then
-    echo "bitrise_tag_xcodeproj_path is empty"
-    exit 1
-  fi
-
-  CURRENT_PROJECT_VERSION=""
-  LINES=$(sed -n '/CURRENT_PROJECT_VERSION/=' "$bitrise_tag_xcodeproj_path/project.pbxproj")
-  for LINE in $LINES; do
-    CURRENT_PROJECT_VERSION=$(sed -n "$LINE"p "$bitrise_tag_xcodeproj_path"/project.pbxproj)
-    CURRENT_PROJECT_VERSION="${CURRENT_PROJECT_VERSION#*= }"
-    CURRENT_PROJECT_VERSION="${CURRENT_PROJECT_VERSION%;}"
-  done
-
-  if [ -z "$CURRENT_PROJECT_VERSION" ]; then
-    echo "CURRENT_PROJECT_VERSION is empty"
-    exit 1
-  fi
-
-  CFBundleVersion=$CURRENT_PROJECT_VERSION
+source ./read_short_bundle_version.sh readShortBundleVersion "$bitrise_tag_info_plist_path" "$bitrise_tag_xcodeproj_path" CFBundleShortVersionString
+if [ -z "$CFBundleShortVersionString" ]; then
+  echo "CFBundleShortVersionString is empty"
+  exit 1
 fi
 
-if [[ $CFBundleShortVersionString == *MARKETING_VERSION* ]]; then
-  echo "Exctract version number from xcodeproj"
-
-  if [ -z "$bitrise_tag_xcodeproj_path" ]; then
-    echo "bitrise_tag_xcodeproj_path is empty"
-    exit 1
-  fi
-
-  MARKETING_VERSION=""
-  LINES=$(sed -n '/MARKETING_VERSION/=' "$bitrise_tag_xcodeproj_path/project.pbxproj")
-  for LINE in $LINES; do
-    MARKETING_VERSION=$(sed -n "$LINE"p "$bitrise_tag_xcodeproj_path"/project.pbxproj)
-    MARKETING_VERSION="${MARKETING_VERSION#*= }"
-    MARKETING_VERSION="${MARKETING_VERSION%;}"
-  done
-
-  if [ -z "$MARKETING_VERSION" ]; then
-    echo "MARKETING_VERSION is empty"
-    exit 1
-  fi
-
-  CFBundleShortVersionString=$MARKETING_VERSION
-fi
-
-TAG_NAME=""
-
-if [ -z "$bitrise_tag_format" ]; then
-  printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
-else
-  if [[ $bitrise_tag_format == *"_VERSION_"* ]] || [[ $bitrise_tag_format == *"_BUILD_"* ]]; then
-  	if [[ $bitrise_tag_format == *"_VERSION_"* ]] && [[ $bitrise_tag_format == *"_BUILD_"* ]]; then
-	    name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
-	    name="${name//_BUILD_/$CFBundleVersion}"
-	    
-    	printf -v TAG_NAME "$name"
-    else 
-    	if [[ $bitrise_tag_format == *"_VERSION_"* ]]; then
-    		name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
-    	else
-    		name="${bitrise_tag_format//_BUILD_/$CFBundleVersion}"
-    	fi
-    	
-    	printf -v TAG_NAME "$name"
-    fi
-  else
-    # Support previous integration
-    printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
-  fi
-fi
+source ./format_version_build.sh format $bitrise_tag_format $CFBundleVersion $CFBundleShortVersionString TAG_NAME
 echo "New tag: $TAG_NAME"
+
 git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"
 
 if [[ $use_lightweight_tag == "yes" ]]; then
