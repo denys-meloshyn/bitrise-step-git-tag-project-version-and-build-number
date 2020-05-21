@@ -104,10 +104,21 @@ TAG_NAME=""
 if [ -z "$bitrise_tag_format" ]; then
   printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
 else
-  if [[ $bitrise_tag_format == *"_VERSION_"* ]]; then
-    name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
-    name="${name//_BUILD_/$CFBundleVersion}"
-    printf -v TAG_NAME "$name"
+  if [[ $bitrise_tag_format == *"_VERSION_"* ]] || [[ $bitrise_tag_format == *"_BUILD_"* ]]; then
+  	if [[ $bitrise_tag_format == *"_VERSION_"* ]] && [[ $bitrise_tag_format == *"_BUILD_"* ]]; then
+	    name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
+	    name="${name//_BUILD_/$CFBundleVersion}"
+	    
+    	printf -v TAG_NAME "$name"
+    else 
+    	if [[ $bitrise_tag_format == *"_VERSION_"* ]]; then
+    		name="${bitrise_tag_format//_VERSION_/$CFBundleShortVersionString}"
+    	else
+    		name="${bitrise_tag_format//_BUILD_/$CFBundleVersion}"
+    	fi
+    	
+    	printf -v TAG_NAME "$name"
+    fi
   else
     # Support previous integration
     printf -v TAG_NAME "v%s(%s)" "$CFBundleShortVersionString" "$CFBundleVersion"
