@@ -12,8 +12,9 @@ function readBundleVersion() {
 	local __resultvar=$3
 
 	local bundle_version_result=""
+	local THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 	
-	source ./read_plist_bundle_version.sh readBundleVersion "$INFO_PLIST_PATH" bundle_version_result
+	source $THIS_SCRIPT_DIR/read_plist_bundle_version.sh readBundleVersion "$INFO_PLIST_PATH" bundle_version_result
 	if [ -z "$bundle_version_result" ]; then
   		echo "Plist CFBundleVersion is empty"
   		exit 1

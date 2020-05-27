@@ -13,7 +13,7 @@ function readShortBundleVersion() {
 
 	local short_bundle_version_result=""
 	
-	source ./read_plist_short_bundle_version.sh readShortBundleVersion "$INFO_PLIST_PATH" short_bundle_version_result
+	source $THIS_SCRIPT_DIR/read_plist_short_bundle_version.sh readShortBundleVersion "$INFO_PLIST_PATH" short_bundle_version_result
 	if [ -z "$short_bundle_version_result" ]; then
 		echo "Plist CFBundleShortVersionString is empty"
 		exit 1
