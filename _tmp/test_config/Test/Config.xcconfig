@@ -1,0 +1,12 @@
+//
+//  Config.xcconfig
+//  Test
+//
+//  Created by Denys Meloshyn on 16/06/2021.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+MY_MARKETING_VERSION = 1.0
+MY_CURRENT_PROJECT_VERSION = 1

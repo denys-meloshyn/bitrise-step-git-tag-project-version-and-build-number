@@ -1,2 +1,8 @@
 .bitrise*
 .gows.user.yml
+_tmp/test_build_settings/Test.xcodeproj/project.xcworkspace
+_tmp/test_build_settings/Test.xcodeproj/xcuserdata
+_tmp/test_config/Test.xcodeproj/project.xcworkspace
+_tmp/test_info_plist/Test.xcodeproj/project.xcworkspace
+_tmp/test_info_plist/Test.xcodeproj/xcuserdata
+_tmp/test_config/Test.xcodeproj/xcuserdata
