@@ -76,3 +76,20 @@ def read_short_bundle_version(info_plist_path, xcode_path, xcworkspace_path, sch
                                     xcworkspace_path=xcworkspace_path,
                                     scheme=scheme,
                                     config=config)
+
+
+def format_result(input_format, bundle_version, short_version):
+    if input_format is None:
+        return "v{}({})".format(short_version, bundle_version)
+
+    if input_format.find('_VERSION_') >= 0 or input_format.find('_BUILD_') >= 0:
+        if input_format.find('_VERSION_') >= 0 and input_format.find('_BUILD_') >= 0:
+            return input_format.replace('_VERSION_', short_version).replace('_BUILD_', bundle_version)
+        else:
+            if input_format.find('_VERSION_') >= 0:
+                return input_format.replace('_VERSION_', short_version)
+            else:
+                return input_format.replace('_BUILD_', bundle_version)
+    else:
+        # Support previous integration
+        return "v{}({})".format(short_version, bundle_version)

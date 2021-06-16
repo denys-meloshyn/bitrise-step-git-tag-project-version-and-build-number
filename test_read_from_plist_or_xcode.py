@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from read_bundle_version import read_short_bundle_version
+from read_bundle_version import read_short_bundle_version, format_result
 
 
 class Test(TestCase):
@@ -39,3 +39,20 @@ class Test(TestCase):
             scheme='Test',
             config='Config')
         self.assertEqual(result, "1.0")
+
+    def test_no_input_format(self):
+        self.assertEqual(format_result(input_format=None, bundle_version='1', short_version='1.0'), 'v1.0(1)')
+
+    def test_legacy_format(self):
+        self.assertEqual(format_result(input_format='v%s(%s)', bundle_version='1', short_version='1.0'), 'v1.0(1)')
+
+    def test_both_input_format_parameters_exist(self):
+        self.assertEqual(format_result(input_format='v_VERSION_(_BUILD_)', bundle_version='1', short_version='1.0'),
+                         'v1.0(1)')
+
+    def test_version_input_format_parameter_exist(self):
+        self.assertEqual(format_result(input_format='v_VERSION_', bundle_version='1', short_version='1.0'),
+                         'v1.0')
+
+    def test_build_input_format_parameter_exist(self):
+        self.assertEqual(format_result(input_format='_BUILD_', bundle_version='1', short_version='1.0'), '1')
