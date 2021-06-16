@@ -33,7 +33,6 @@ def read_xcode_value(key, xcode_path, xcworkspace_path, scheme, config):
         ]
 
         command = ' '.join(commands)
-        print(command)
         stream = os.popen(command)
     else:
         exit("Path is not provided")
@@ -44,44 +43,48 @@ def read_xcode_value(key, xcode_path, xcworkspace_path, scheme, config):
     return xcode_dict['buildSettings'][key]
 
 
-def read_from_plist_or_xcode(info_plist_path, xcode_path, xcworkspace_path, scheme, config):
+def read_from_plist_or_xcode(plist_key, xcode_key, info_plist_path, xcode_path, xcworkspace_path, scheme, config):
     os.system("plutil -convert json {} -e json".format(info_plist_path))
 
-    value = read_plist_value(key='CFBundleVersion', info_plist_path=info_plist_path)
+    value = read_plist_value(key=plist_key, info_plist_path=info_plist_path)
 
     if value.startswith('$('):
-        value = read_xcode_value(key='MARKETING_VERSION',
+        value = read_xcode_value(key=xcode_key,
                                  xcode_path=xcode_path,
                                  xcworkspace_path=xcworkspace_path,
                                  scheme=scheme,
                                  config=config)
 
-    print(value)
     return value
 
-
-read_from_plist_or_xcode(
-    info_plist_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
-                    '/test_info_plist/Test/Info.plist',
-    xcode_path=None,
-    xcworkspace_path=None,
-    scheme=None,
-    config=None)
-
-read_from_plist_or_xcode(
-    info_plist_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
-                    '/test_build_settings/Test/Info.plist',
-    xcode_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
-               '/test_build_settings/Test.xcodeproj',
-    xcworkspace_path=None,
-    scheme=None,
-    config=None)
-
-read_from_plist_or_xcode(
-    info_plist_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
-                    '/test_workspace_config/Test/Info.plist',
-    xcode_path=None,
-    xcworkspace_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
-                     '/test_workspace_config/Test.xcworkspace',
-    scheme='Test',
-    config='Config')
+# read_from_plist_or_xcode(
+#     plist_key='CFBundleVersion',
+#     xcode_key='MARKETING_VERSION',
+#     info_plist_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
+#                     '/test_info_plist/Test/Info.plist',
+#     xcode_path=None,
+#     xcworkspace_path=None,
+#     scheme=None,
+#     config=None)
+#
+# read_from_plist_or_xcode(
+#     plist_key='CFBundleVersion',
+#     xcode_key='MARKETING_VERSION',
+#     info_plist_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
+#                     '/test_build_settings/Test/Info.plist',
+#     xcode_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
+#                '/test_build_settings/Test.xcodeproj',
+#     xcworkspace_path=None,
+#     scheme=None,
+#     config=None)
+#
+# read_from_plist_or_xcode(
+#     plist_key='CFBundleVersion',
+#     xcode_key='MARKETING_VERSION',
+#     info_plist_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
+#                     '/test_workspace_config/Test/Info.plist',
+#     xcode_path=None,
+#     xcworkspace_path='/Users/denys/Projects/bitrise-step-git-tag-project-version-and-build-number/_tmp'
+#                      '/test_workspace_config/Test.xcworkspace',
+#     scheme='Test',
+#     config='Config')
