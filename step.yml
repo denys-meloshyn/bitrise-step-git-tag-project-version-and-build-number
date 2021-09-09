@@ -92,6 +92,15 @@ inputs:
       value_options:
         - "no"
         - "yes"
+  - update_tag: "no"
+    opts:
+      category: Config
+      title: "Update tag if already exists?"
+      description: |
+        If yes, the previous tag will be removed and recreated with the latest commit
+      value_options:
+        - "no"
+        - "yes"
 
 outputs:
   - EXAMPLE_STEP_OUTPUT:

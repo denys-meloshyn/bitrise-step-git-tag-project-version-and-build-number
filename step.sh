@@ -24,6 +24,11 @@ fi
 source $THIS_SCRIPT_DIR/format_version_build.sh format $bitrise_tag_format $CFBundleVersion $CFBundleShortVersionString TAG_NAME
 echo "New tag: $TAG_NAME"
 
+if [[ $update_tag == "yes" && $(git tag -l "$TAG_NAME") ]]; then
+  git tag -d "$TAG_NAME"
+  git push --delete origin "$TAG_NAME"
+fi
+
 git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"
 
 if [[ $use_lightweight_tag == "yes" ]]; then

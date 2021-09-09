@@ -48,6 +48,7 @@ workflows:
             #- bitrise_tag_format: "build__BUILD_"
             #- bitrise_tag_format: "v_VERSION_"
             - use_lightweight_tag: "no"
+            - update_tag: "no"
       - script:
           inputs:
             - content: |
