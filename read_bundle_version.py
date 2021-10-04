@@ -3,9 +3,9 @@ import os
 
 
 def read_plist_value(key, info_plist_path):
-    os.system("plutil -convert json {} -e json".format(info_plist_path))
-
     info_plist_json_path = info_plist_path.replace(".plist", ".json")
+    os.system("plutil -convert json -o \"{}\" \"{}\" ".format(info_plist_json_path, info_plist_path))
+
     with open(info_plist_json_path, "r") as f:
         data = json.load(f)
 
@@ -14,8 +14,12 @@ def read_plist_value(key, info_plist_path):
 
 def read_xcode_value(key, xcode_path, xcworkspace_path, scheme, config):
     if xcode_path is not None:
-        stream = os.popen("xcodebuild -project {} -showBuildSettings -json".format(xcode_path))
+        stream = os.popen("xcodebuild -project \"{}\" -showBuildSettings -json".format(xcode_path))
     elif xcworkspace_path is not None:
+        if scheme is None:
+            print("In case of using xcworkspace scheme should be provided")
+            exit(1)
+
         commands = [
             "xcodebuild",
             "-workspace {}".format(xcworkspace_path),
@@ -35,7 +39,9 @@ def read_xcode_value(key, xcode_path, xcworkspace_path, scheme, config):
         command = ' '.join(commands)
         stream = os.popen(command)
     else:
-        exit("Path is not provided")
+        print("xcodeproj or xcworkspace is not provided")
+        exit(1)
+        return
 
     xcode_dict = json.loads(stream.read())
     xcode_dict = xcode_dict[0]
@@ -44,8 +50,6 @@ def read_xcode_value(key, xcode_path, xcworkspace_path, scheme, config):
 
 
 def read_from_plist_or_xcode(plist_key, xcode_key, info_plist_path, xcode_path, xcworkspace_path, scheme, config):
-    os.system("plutil -convert json {} -e json".format(info_plist_path))
-
     value = read_plist_value(key=plist_key, info_plist_path=info_plist_path)
 
     if value.startswith('$('):

@@ -62,13 +62,6 @@ toolkit:
 
 
 inputs:
-  - bitrise_tag_xcodeproj_path: ""
-    opts:
-      title: "Path to the 'xcodeproj'"
-      summary: Path to the 'xcodeproj'
-      description: |
-        Use it with Xcode 11 and higher.
-      is_required: false
   - bitrise_tag_info_plist_path: ""
     opts:
       title: "Path to the 'Info.plist'"
@@ -76,6 +69,34 @@ inputs:
       description: |
         File of your release 'Info.plist' file.
       is_required: true
+  - bitrise_tag_xcodeproj_path: ""
+    opts:
+      title: "Path to the 'xcodeproj'"
+      summary: Path to the 'xcodeproj'
+      description: |
+        Use it in case Info.plist value reference to build settings property (ex $(CURRENT_PROJECT_VERSION))
+      is_required: false
+  - bitrise_tag_xcworkspace_path: ""
+    opts:
+      title: "Path to the 'xcworkspace'"
+      summary: Path to the 'xcworkspace'
+      description: |
+        Use it in case Info.plist value reference to build settings property (ex $(CURRENT_PROJECT_VERSION))
+      is_required: false
+  - bitrise_tag_xcworkspace_scheme: ""
+    opts:
+      title: "xcworkspace scheme name"
+      summary: xcworkspace scheme name
+      description: |
+        Should be provided in case of using xcworkspace
+      is_required: false
+  - bitrise_tag_xcconfig_name: ""
+    opts:
+      title: "xcconfig name"
+      summary: xcconfig name
+      description: |
+        In case `xcworkspace` version and build number are configured in `xcconfig` provide it name
+      is_required: false
   - bitrise_tag_format: "v_VERSION_(_BUILD_)"
     opts:
       title: "Result format"

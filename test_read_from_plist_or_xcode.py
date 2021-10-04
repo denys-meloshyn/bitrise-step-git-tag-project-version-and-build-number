@@ -36,7 +36,7 @@ class Test(TestCase):
             info_plist_path='./_tmp/test_workspace_config/Test/Info.plist',
             xcode_path=None,
             xcworkspace_path='./_tmp/test_workspace_config/Test.xcworkspace',
-            scheme='Test',
+            scheme=None,
             config='Config')
         self.assertEqual(result, "1.0")
 
