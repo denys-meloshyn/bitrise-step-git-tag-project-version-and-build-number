@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -ex
+set -e
 
 if [ -z "$bitrise_tag_info_plist_path" ]; then
   echo "bitrise_tag_info_plist_path is empty"
@@ -14,6 +14,11 @@ echo "New tag: $TAG_NAME"
 
 if [ $? != 0 ]; then
   exit 1
+fi
+
+if [[ $update_tag == "yes" && $(git tag -l "$TAG_NAME") ]]; then
+  git tag -d "$TAG_NAME"
+  git push --delete origin "$TAG_NAME"
 fi
 
 git tag "$TAG_NAME" "$GIT_CLONE_COMMIT_HASH"

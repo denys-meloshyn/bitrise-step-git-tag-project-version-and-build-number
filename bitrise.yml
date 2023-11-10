@@ -9,7 +9,7 @@ app:
     - BITRISE_STEP_ID: git-tag-project-version-and-build-number
     - BITRISE_STEP_VERSION: "0.0.1"
     - BITRISE_STEP_GIT_CLONE_URL: https://github.com/https://github.com/ned1988/bitrise-step-git-tag-project-version-and-build-number/bitrise-step-git-tag-project-version-and-build-number.git
-    - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
+    - MY_STEPLIB_REPO_FORK_GIT_URL: https://github.com/denys-meloshyn/bitrise-steplib.git
 
 workflows:
   test:
@@ -52,6 +52,7 @@ workflows:
             #- bitrise_tag_format: "build__BUILD_"
             #- bitrise_tag_format: "v_VERSION_"
             - use_lightweight_tag: "no"
+            - update_tag: "no"
       - script:
           inputs:
             - content: |
