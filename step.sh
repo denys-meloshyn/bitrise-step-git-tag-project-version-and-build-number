@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -ex
+set -e
 
 if [ -z "$bitrise_tag_info_plist_path" ]; then
   echo "bitrise_tag_info_plist_path is empty"
